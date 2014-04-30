@@ -11,27 +11,32 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import com.mkyong.customer.model.Customer;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.support.SessionStatus;
 
-public class CustomerController extends SimpleFormController {
+@Controller
+@RequestMapping("/customer.htm")
+public class CustomerController {
 
-    public CustomerController() {
-        setCommandClass(Customer.class);
-        setCommandName("customerForm");
-    }
-
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest request,
-            HttpServletResponse response, Object command, BindException errors)
+ 
+    @RequestMapping(method = RequestMethod.POST)
+    protected String processSubmit(@ModelAttribute("customer") Customer customer,
+            BindingResult result, SessionStatus status)
             throws Exception {
 
-        Customer customer = (Customer) command;
-        System.out.println(customer);
-        return new ModelAndView("CustomerSuccess", "customer", customer);
+        //clear the command object from the session
+        status.setComplete();
+        return "CustomerSuccess";
 
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest request)
+    @RequestMapping(method = RequestMethod.GET)
+    protected String initForm(ModelMap model)
             throws Exception {
 
         Customer cust = new Customer();
@@ -47,13 +52,55 @@ public class CustomerController extends SimpleFormController {
         //initilize a hidden value
         cust.setSecretValue("I'm hidden value");
 
-        return cust;
+        //command object
+        model.addAttribute("customer", cust);
+
+        return "CustomerForm";
     }
 
-    @Override
-    protected Map referenceData(HttpServletRequest request) throws Exception {
-
-        Map referenceData = new HashMap();
+//    protected Map referenceData(HttpServletRequest request) throws Exception {
+//
+//        Map referenceData = new HashMap();
+//
+//        //Data referencing for web framework checkboxes
+//        List<String> webFrameworkList = new ArrayList<String>();
+//        webFrameworkList.add("Spring MVC");
+//        webFrameworkList.add("Struts 1");
+//        webFrameworkList.add("Struts 2");
+//        webFrameworkList.add("JSF");
+//        webFrameworkList.add("Apache Wicket");
+//        referenceData.put("webFrameworkList", webFrameworkList);
+//
+//        //Data referencing for number radiobuttons
+//        List<String> numberList = new ArrayList<String>();
+//        numberList.add("Number 1");
+//        numberList.add("Number 2");
+//        numberList.add("Number 3");
+//        numberList.add("Number 4");
+//        numberList.add("Number 5");
+//        referenceData.put("numberList", numberList);
+//
+//        //Data referencing for country dropdown box
+//        Map<String, String> country = new LinkedHashMap<String, String>();
+//        country.put("US", "United Stated");
+//        country.put("CHINA", "China");
+//        country.put("SG", "Singapore");
+//        country.put("MY", "Malaysia");
+//        referenceData.put("countryList", country);
+//
+//        //Data referencing for java skills list box
+//        Map<String, String> javaSkill = new LinkedHashMap<String, String>();
+//        javaSkill.put("Hibernate", "Hibernate");
+//        javaSkill.put("Spring", "Spring");
+//        javaSkill.put("Apache Wicket", "Apache Wicket");
+//        javaSkill.put("Struts", "Struts");
+//        referenceData.put("javaSkillsList", javaSkill);
+//
+//        return referenceData;
+//    }
+    
+    @ModelAttribute("webFrameworkList")
+    public List<String> populateWebFrameworkList() {
 
         //Data referencing for web framework checkboxes
         List<String> webFrameworkList = new ArrayList<String>();
@@ -62,33 +109,7 @@ public class CustomerController extends SimpleFormController {
         webFrameworkList.add("Struts 2");
         webFrameworkList.add("JSF");
         webFrameworkList.add("Apache Wicket");
-        referenceData.put("webFrameworkList", webFrameworkList);
 
-        //Data referencing for number radiobuttons
-        List<String> numberList = new ArrayList<String>();
-        numberList.add("Number 1");
-        numberList.add("Number 2");
-        numberList.add("Number 3");
-        numberList.add("Number 4");
-        numberList.add("Number 5");
-        referenceData.put("numberList", numberList);
-
-        //Data referencing for country dropdown box
-        Map<String, String> country = new LinkedHashMap<String, String>();
-        country.put("US", "United Stated");
-        country.put("CHINA", "China");
-        country.put("SG", "Singapore");
-        country.put("MY", "Malaysia");
-        referenceData.put("countryList", country);
-
-        //Data referencing for java skills list box
-        Map<String, String> javaSkill = new LinkedHashMap<String, String>();
-        javaSkill.put("Hibernate", "Hibernate");
-        javaSkill.put("Spring", "Spring");
-        javaSkill.put("Apache Wicket", "Apache Wicket");
-        javaSkill.put("Struts", "Struts");
-        referenceData.put("javaSkillsList", javaSkill);
-
-        return referenceData;
+        return webFrameworkList;
     }
 }
