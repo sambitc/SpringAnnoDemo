@@ -1,43 +1,57 @@
 package com.mkyong.customer.controller;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-import com.mkyong.customer.model.Customer;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.mkyong.customer.model.Customer;
+import com.mkyong.customer.validator.CustomerValidator;
+
 @Controller
 @RequestMapping("/customer.htm")
 public class CustomerController {
 
- 
+    CustomerValidator customerValidator;
+
+    @Autowired
+    public CustomerController(CustomerValidator customerValidator) {
+        this.customerValidator = customerValidator;
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    protected String processSubmit(@ModelAttribute("customer") Customer customer,
-            BindingResult result, SessionStatus status)
-            throws Exception {
+    public String processSubmit(
+            @ModelAttribute("customer") Customer customer,
+            BindingResult result, SessionStatus status) {
 
-        //clear the command object from the session
-        status.setComplete();
-        return "CustomerSuccess";
+        customerValidator.validate(customer, result);
 
+        if (result.hasErrors()) {
+            //if validator failed
+            return "CustomerForm";
+        } else {
+            status.setComplete();
+            //form success
+            return "CustomerSuccess";
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    protected String initForm(ModelMap model)
-            throws Exception {
+    public String initForm(ModelMap model) {
 
         Customer cust = new Customer();
         //Make "Spring MVC" as default checked value
@@ -55,50 +69,10 @@ public class CustomerController {
         //command object
         model.addAttribute("customer", cust);
 
+        //return form view
         return "CustomerForm";
     }
 
-//    protected Map referenceData(HttpServletRequest request) throws Exception {
-//
-//        Map referenceData = new HashMap();
-//
-//        //Data referencing for web framework checkboxes
-//        List<String> webFrameworkList = new ArrayList<String>();
-//        webFrameworkList.add("Spring MVC");
-//        webFrameworkList.add("Struts 1");
-//        webFrameworkList.add("Struts 2");
-//        webFrameworkList.add("JSF");
-//        webFrameworkList.add("Apache Wicket");
-//        referenceData.put("webFrameworkList", webFrameworkList);
-//
-//        //Data referencing for number radiobuttons
-//        List<String> numberList = new ArrayList<String>();
-//        numberList.add("Number 1");
-//        numberList.add("Number 2");
-//        numberList.add("Number 3");
-//        numberList.add("Number 4");
-//        numberList.add("Number 5");
-//        referenceData.put("numberList", numberList);
-//
-//        //Data referencing for country dropdown box
-//        Map<String, String> country = new LinkedHashMap<String, String>();
-//        country.put("US", "United Stated");
-//        country.put("CHINA", "China");
-//        country.put("SG", "Singapore");
-//        country.put("MY", "Malaysia");
-//        referenceData.put("countryList", country);
-//
-//        //Data referencing for java skills list box
-//        Map<String, String> javaSkill = new LinkedHashMap<String, String>();
-//        javaSkill.put("Hibernate", "Hibernate");
-//        javaSkill.put("Spring", "Spring");
-//        javaSkill.put("Apache Wicket", "Apache Wicket");
-//        javaSkill.put("Struts", "Struts");
-//        referenceData.put("javaSkillsList", javaSkill);
-//
-//        return referenceData;
-//    }
-    
     @ModelAttribute("webFrameworkList")
     public List<String> populateWebFrameworkList() {
 
@@ -111,5 +85,45 @@ public class CustomerController {
         webFrameworkList.add("Apache Wicket");
 
         return webFrameworkList;
+    }
+
+    @ModelAttribute("numberList")
+    public List<String> populateNumberList() {
+
+        //Data referencing for number radiobuttons
+        List<String> numberList = new ArrayList<String>();
+        numberList.add("Number 1");
+        numberList.add("Number 2");
+        numberList.add("Number 3");
+        numberList.add("Number 4");
+        numberList.add("Number 5");
+
+        return numberList;
+    }
+
+    @ModelAttribute("javaSkillsList")
+    public Map<String, String> populateJavaSkillList() {
+
+        //Data referencing for java skills list box
+        Map<String, String> javaSkill = new LinkedHashMap<String, String>();
+        javaSkill.put("Hibernate", "Hibernate");
+        javaSkill.put("Spring", "Spring");
+        javaSkill.put("Apache Wicket", "Apache Wicket");
+        javaSkill.put("Struts", "Struts");
+
+        return javaSkill;
+    }
+
+    @ModelAttribute("countryList")
+    public Map<String, String> populateCountryList() {
+
+        //Data referencing for java skills list box
+        Map<String, String> country = new LinkedHashMap<String, String>();
+        country.put("US", "United Stated");
+        country.put("CHINA", "China");
+        country.put("SG", "Singapore");
+        country.put("MY", "Malaysia");
+
+        return country;
     }
 }
