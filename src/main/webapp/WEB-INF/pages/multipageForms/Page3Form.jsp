@@ -19,7 +19,7 @@
     <body>
         <h2>Page3Form.jsp</h2>
 
-        <form:form method="POST" commandName="userForm">
+        <form:form method="POST" commandName="user">
             <form:errors path="*" cssClass="errorblock" element="div" />
             <table>
                 <tr>

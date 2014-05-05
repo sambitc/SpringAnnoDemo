@@ -16,8 +16,6 @@ public class WelcomeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String initForm(ModelMap model) {
-        
-        System.out.println("-------------hai");
         return ("multipageForms/WelcomePage");
     }
 }

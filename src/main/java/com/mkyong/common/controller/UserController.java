@@ -1,30 +1,31 @@
 package com.mkyong.common.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractWizardFormController;
 import com.mkyong.common.model.User;
 import com.mkyong.common.validator.UserValidator;
 import com.mkyong.customer.model.Customer;
 import com.mkyong.customer.validator.CustomerValidator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.AbstractWizardFormController;
 
 @Controller
 @RequestMapping("/user.htm")
 @SessionAttributes("user")
 public class UserController {
-    
+
     UserValidator userValidator;
 
     @Autowired
@@ -37,24 +38,30 @@ public class UserController {
         //command object
         model.addAttribute("user", new User());
 
-        return "multipageForms/page1Form";
+        return "multipageForms/Page1Form";
     }
-    
-    @RequestMapping(method = RequestMethod.POST)
-    public String processSubmit(
-            @ModelAttribute("user") User user,
-            BindingResult result, SessionStatus status) {
-        return "multipageForms/page1Form";
 
+//    @RequestMapping(method = RequestMethod.POST)
+//    public String processSubmit(
+//            @ModelAttribute("user") User user,
+//            BindingResult result, SessionStatus status) {
+//        return "multipageForms/Page1Form";
+//
+//    }
+    @RequestMapping(method = RequestMethod.POST)
+    public String processPage(@RequestParam("_page") final int currentPage,
+            final @ModelAttribute("user") User user,
+            final HttpServletResponse response) {
+
+        System.out.println("========" + currentPage);
+        // do something based on page number
+        if (currentPage == 1) {
+            return "multipageForms/Page2Form";
+        } else {
+            return "multipageForms/Page3Form";
+        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
 //    public UserController() {
 //        setCommandName("userForm");
 //    }

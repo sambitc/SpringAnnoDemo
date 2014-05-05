@@ -19,7 +19,7 @@
     <body>
         <h2>Page2Form.jsp</h2>
 
-        <form:form method="POST" commandName="userForm">
+        <form:form method="POST" commandName="user">
             <form:errors path="*" cssClass="errorblock" element="div" />
             <table>
                 <tr>
@@ -32,6 +32,7 @@
                 <tr>
                 <tr>
                     <td colspan="3">
+                        <input type="hidden" value="2" name="_page"/>
                         <input type="submit" value="Previous" name="_target0" /> 
                         <input type="submit" value="Next" name="_target2" />
                         <input type="submit" value="Cancel" name="_cancel" />
