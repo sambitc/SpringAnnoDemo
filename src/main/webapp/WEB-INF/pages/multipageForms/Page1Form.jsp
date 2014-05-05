@@ -32,7 +32,7 @@
                 <tr>
                 <tr>
                     <td colspan="3">
-                        <input type="hidden" value="1" name="_page"/>
+                        <input type="hidden" value="0" name="_page"/>
                         <input type="submit" value="Next" name="_target1" /> 
                         <input type="submit" value="Cancel" name="_cancel" />
                     </td>

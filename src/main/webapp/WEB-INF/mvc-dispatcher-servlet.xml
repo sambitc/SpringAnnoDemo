@@ -5,8 +5,7 @@
 	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
- 
-    <!--<context:component-scan base-package="com.mkyong.customer.controller" />-->
+
     <context:component-scan base-package="com.mkyong" />
     <bean class="com.mkyong.common.validator.UserValidator" />
     
@@ -27,31 +26,9 @@
             <value>.jsp</value>
         </property>
     </bean>
-        
-    <!--Multiple form-->
-    
+
     <bean id="userResources"
           class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="User" />
     </bean>
-    
-    <!--<bean class="com.mkyong.common.controller.WelcomeController" />-->   
-    <!--<bean class="com.mkyong.common.controller.UserController" />-->  
-    
-    <!--    
-    <bean class="com.mkyong.common.controller.UserController" >
-        <property name="pages">
-            <list>
-                 follow sequence 
-                <value>multipageForms/Page1Form</value>  page1, _target0 
-                <value>multipageForms/Page2Form</value>  page2, _target1 
-                <value>multipageForms/Page3Form</value>  page3, _target2 
-            </list>
-        </property>
-        <property name="validator">
-            <bean class="com.mkyong.common.validator.UserValidator" />
-        </property>
-    </bean>-->
-    
-    <!-- ============END============== -->
 </beans>

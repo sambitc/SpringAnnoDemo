@@ -32,6 +32,7 @@
                 <tr>
                 <tr>
                     <td colspan="3">
+                        <input type="hidden" value="2" name="_page"/>
                         <input type="submit" value="Previous" name="_target1" /> 
                         <input type="submit" value="Finish" name="_finish" /> 
                         <input type="submit" value="Cancel" name="_cancel" />
