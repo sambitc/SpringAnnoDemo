@@ -12,14 +12,16 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 @Controller
-@RequestMapping("/user.htm")
+//@RequestMapping("/user.htm")
 @SessionAttributes("user")
 public class UserController {
 
@@ -30,7 +32,7 @@ public class UserController {
         this.userValidator = userValidator;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/user/data",method = RequestMethod.GET)
     public String initialForm(ModelMap model) {
         //command object
         model.addAttribute("user", new User());
@@ -38,7 +40,7 @@ public class UserController {
         return "multipageForms/Page1Form";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/user/data",method = RequestMethod.POST)
     public String processPage(HttpServletRequest request,
             @RequestParam("_page") final int currentPage,
             final @ModelAttribute("user") User user,
@@ -62,7 +64,7 @@ public class UserController {
                 return (String) pageForms.get(currentPage);
             } else {
                 model.addAttribute("user1", user);
-                return "multipageForms/ResultForm";
+                return "redirect:/user/ResultForm";
             }
         } else {
             // User clicked Next or Previous(_target) 
@@ -95,10 +97,12 @@ public class UserController {
                 // Errors, return current page 
                 return (String) pageForms.get(currentPage);
             }
-
-
-//            // User clicked 'Next', return target page 
-//            return (String) pageForms.get(targetPage);
         }
+    }
+    
+    @RequestMapping("/user/ResultForm")
+    public ModelAndView showOwner() {
+        ModelAndView mav = new ModelAndView("multipageForms/ResultForm");
+        return mav;
     }
 }
