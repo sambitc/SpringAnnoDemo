@@ -32,7 +32,7 @@ public class UserController {
         this.userValidator = userValidator;
     }
 
-    @RequestMapping(value = "/user/data",method = RequestMethod.GET)
+    @RequestMapping(value = "/user",method = RequestMethod.GET)
     public String initialForm(ModelMap model) {
         //command object
         model.addAttribute("user", new User());
@@ -40,7 +40,7 @@ public class UserController {
         return "multipageForms/Page1Form";
     }
 
-    @RequestMapping(value = "/user/data",method = RequestMethod.POST)
+    @RequestMapping(value = "/user",method = RequestMethod.POST)
     public String processPage(HttpServletRequest request,
             @RequestParam("_page") final int currentPage,
             final @ModelAttribute("user") User user,
